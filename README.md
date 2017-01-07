@@ -3,11 +3,8 @@ Makes easy getting data from a LUA file
 
 // gitter budget
 
-##Overview##
-![LuaWrapper](https://snag.gy/lua.jpg)
+##Highlights##
+- Makes use of [Lua](https://www.lua.org/download.html)
 
-##Using##
+##How to use##
 - 
-
-##Tasks List##
-- [ ] lorem pisum
