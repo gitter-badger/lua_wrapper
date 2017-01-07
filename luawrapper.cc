@@ -1,8 +1,7 @@
 /**
 *
-* @project HotByte
 * @brief LuaWrapper Class
-* @author Toni Marquez, Alvaro Belmonte
+* @author Toni Marquez
 *
 **/
 
