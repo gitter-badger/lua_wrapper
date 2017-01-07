@@ -1,113 +1,141 @@
 /**
- *
- * @brief Lua Wrapper
- * @author Toni Marquez
- * @fixes register function
- *
- **/
+*
+* @brief LuaWrapper Header
+* @author Toni Marquez
+*
+**/
 
 #ifndef __LUAWRAPPER_H__
 #define __LUAWRAPPER_H__ 1
 
-#include <stdio.h>
-#include <stdlib.h>
+#include <string>
+#include "LUA/lua.hpp"
 
-#include "lua.hpp"
+namespace HB {
 
-class LuaWrapper {
+  class LuaWrapper {
 
-  public:
+    public:
 
-    /// constructor
+    /** constructor & destructor **/
     LuaWrapper();
-
-    /// destructor
     ~LuaWrapper();
 
-    /// init values
-    void init(const char* path);
+    /// init
+    void init(const std::string path);
     /**
-     *
-     *  this is like the lua stack works (LIFO):
-     *
-     *       |   |
-     *     3 | - | -1
-     *     2 | - | -2
-     *     1 | - | -3
-     *       |___|
-     *
-     **/
-
-    /**
-     * @brief register a function / call the function
-     * @param const char* lua_function, lua_CFunction cfunction / none
-     * @return void / void
-     **/
-    void registerFunction(const char* lua_function, lua_CFunction cfunction);
-    void callFunction();
-    /*
-    // use this function for callback
-    int LuaUpdate(lua_State* LUA){{
-
-      return 0;
-    }
-    */
+    *
+    *  this is like the lua stack works (LIFO):
+    *
+    *       |   |
+    *     3 | - | -1
+    *     2 | - | -2
+    *     1 | - | -3
+    *       |___|
+    *
+    **/
 
     /**
-     * @brief insert global from lua file to the stack and pop it
-     * @param const char* global
-     * @return const int / const float / const char* / const bool
-     **/
-    const int getGlobalInteger(const char* global);
-    const float getGlobalNumber(const char* global);
-    const char* getGlobalString(const char* global);
-    const bool getGlobalBoolean(const char* global);
+    * @brief insert global from lua file to the stack and pop it
+    * @param const std::string global
+    * @return const int / const float / const std::string / const bool
+    **/
+    const int getGlobalInteger(const std::string global);
+    const float getGlobalNumber(const std::string global);
+    const std::string getGlobalString(const std::string global);
+    const bool getGlobalBoolean(const std::string global);
+    /**
+    *
+    *  integer = 50;
+    *
+    **/
 
     /**
-     * @brief insert table from lua file to the stack, get a specified field
-     *        and pop it
-     * @param const char* table, const char* field
-     * @return const int / const float / const char* / const bool
-     **/
-     const int getIntegerFromTable(const char* table, const char* field);
-     const float getNumberFromTable(const char* table, const char* field);
-     const char* getStringFromTable(const char* table, const char* field);
-     const bool getBooleanFromTable(const char* table, const char* field);
+    * @brief insert table from lua file to the stack, get a specified field
+    *        and pop it
+    * @param const std::string table, const std::string field
+    * @return const int / const float / const std::string / const bool
+    **/
+    const int getIntegerFromTable(const std::string table,
+                                  const std::string field);
+    const float getNumberFromTable(const std::string table,
+                                   const std::string field);
+    const std::string getStringFromTable(const std::string table,
+                                         const std::string field);
+    const bool getBooleanFromTable(const std::string table,
+                                   const std::string field);
+    /**
+    *
+    *  table = {
+    *    integer = 25,
+    *    number = 10.5
+    *  };
+    *
+    **/
 
-     /**
-     * @brief insert table from lua file to the stack and get a specified
-     *        position by index
-     * @param const char* table, const short int index
-     * @return const int / const float / const char* / const bool
-     **/
-    const int getIntegerFromTableByIndex(const char* table,
+    /**
+    * @brief get an entire array of elements form stack (global array)
+    * @param const std::string array
+    * @return const int / const float
+    **/
+    const int* getGlobalArrayOfIntegers(const std::string array,
+                                        int* num = NULL);
+    const float* getGlobalArrayOfNumbers(const std::string array,
+                                         int* num = NULL);
+    /**
+    *
+    *  array = { 1, 2, 3, 4, 5 }; // returns the entire array
+    *
+    **/
+
+    /**
+    * @brief insert table from lua file to the stack and get a specified
+    *        position by index
+    * @param const std::string array, const short int index
+    * @return const int / const float
+    **/
+    const int getIntegerFromArrayByIndex(const std::string array,
                                          const short int index);
-    const float getNumberFromTableByIndex(const char* table,
+    const float getNumberFromArrayByIndex(const std::string array,
                                           const short int index);
-    const char* getStringFromTableByIndex(const char* table,
-                                          const short int index);
-    const bool getBooleanFromTableByIndex(const char* table,
-                                          const short int index);
+    /**
+    *
+    *  array = { 1, 2, 3, 4, 5 }; // returns only one element
+    *
+    **/
 
-    /** releasers **/
-    void pop(const unsigned short int num_elements);
-    void remove(const short int index);
-    void free();
+    /**
+    * @brief get an entire array of elements form stack (table array)
+    * @param const std::string array
+    * @return const int / const float
+    **/
+    const int* getArrayOfIntegersFromTable(const std::string table,
+                                           const std::string array,
+                                           int* num = NULL);
+    const float* getArrayOfNumbersFromTable(const std::string table,
+                                            const std::string array,
+                                            int* num = NULL);
+    /**
+    *
+    *  table = {
+    *    array_of_integers = { 1, 2, 3, 4, 5 },
+    *    array_of_numbers = { 1.0, 2.0, 3.0, 4.0, 5.0 }
+    *  };
+    *
+    **/
 
-    /// reset lua
-    void reset();
+    /// get number of elements of an array
+    const int size(const std::string array);
+    const int size(const std::string table, const std::string array);
 
     /// close lua
     void close();
 
-  private:
-
-    /// copy constructor
-    LuaWrapper(const LuaWrapper& copy);
-    LuaWrapper operator=(const LuaWrapper& copy);
+    private:
 
     /// private vars
     lua_State* LUA_;
-};
+  };
+}
 
 #endif
